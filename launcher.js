@@ -3,13 +3,13 @@
   const S = WB.store, U = WB.util;
 
   const DEFAULT_APPS = [
-    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#1a1a1a', scheme: 'barcelona://', url: 'https://www.threads.net' },
-    { id: 'a_music', name: '音乐', icon: '🎵', color: '#ff2d55', scheme: 'music://', url: 'https://music.apple.com' },
-    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#ff2442', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
-    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#1c1c1c', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
-    { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#58cc02', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
-    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#ffcc00', scheme: 'mobilenotes://', url: '' },
-    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#ff7a59', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
+    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#6b6b6b', scheme: 'barcelona://', url: 'https://www.threads.net' },
+    { id: 'a_music', name: '音乐', icon: '🎵', color: '#ff8fa3', scheme: 'music://', url: 'https://music.apple.com' },
+    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#ff8a8a', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
+    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#5c5c5c', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
+    { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#9ddd70', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
+    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#ffd54f', scheme: 'mobilenotes://', url: '' },
+    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#ffaa7a', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
   ];
 
   function getApps() {
@@ -147,7 +147,7 @@
   }
 
   function randColor() {
-    const c = ['#4f7cff', '#2bb673', '#f5a623', '#ef5b6b', '#9b59b6', '#1dd1a1', '#ee5253', '#576574'];
+    const c = ['#f5a623', '#8fd460', '#7ec8e3', '#ff8a6a', '#bfa3f5', '#ffd54f', '#ff9eb5', '#7ed6c1'];
     return c[Math.floor(Math.random() * c.length)];
   }
 

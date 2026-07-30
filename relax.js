@@ -48,11 +48,11 @@
         <div class="card__title" style="margin-bottom:12px">⚡ 快速打开</div>
         <div class="grid grid--2">
           <button class="app-tile" id="openX">
-            <div class="app-tile__icon" style="background:#000">𝕏</div>
+            <div class="app-tile__icon" style="background:#8c8c8c">🐦</div>
             <div class="app-tile__name">X / Twitter</div>
           </button>
           <button class="app-tile" id="openMusic">
-            <div class="app-tile__icon" style="background:#ff2d55">🎵</div>
+            <div class="app-tile__icon" style="background:#ff9eb5">🎵</div>
             <div class="app-tile__name">音乐</div>
           </button>
         </div>
@@ -60,7 +60,7 @@
 
       <div class="card" style="text-align:center">
         <div class="card__title" style="margin-bottom:12px">🌬️ 盒式呼吸</div>
-        <div id="breathBox" style="width:120px;height:120px;border-radius:50%;background:linear-gradient(150deg,var(--brand),#7aa0ff);margin:0 auto 14px;display:grid;place-items:center;color:#fff;font-weight:700;transition:transform 4s ease-in-out,opacity 4s">吸气</div>
+        <div id="breathBox" style="width:120px;height:120px;border-radius:50%;background:linear-gradient(150deg,var(--brand),#ffd07a);margin:0 auto 14px;display:grid;place-items:center;color:#5c3d00;font-weight:700;transition:transform 4s ease-in-out,opacity 4s">吸气</div>
         <button class="btn btn--soft" id="breathBtn">开始 4 分钟呼吸</button>
         <div class="faint" style="font-size:12px;margin-top:10px">吸气 4 秒 → 屏息 4 秒 → 呼气 4 秒 → 屏息 4 秒</div>
       </div>

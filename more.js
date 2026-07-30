@@ -100,9 +100,24 @@
   }
 
   function render(root) {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const barStyle = S.get('topBarStyle', 'journal');
     root.innerHTML = `<div class="card">
         <div class="card__head"><div class="card__title">⚙️ 我的工作台</div></div>
-        <div class="row row--between"><span class="muted">深色模式</span><button class="btn btn--ghost btn--sm" id="themeBtn">切换</button></div>
+        <div class="row row--between" style="margin-bottom:10px">
+          <span class="muted">深色模式</span>
+          <button class="btn btn--ghost btn--sm" id="themeBtn">${isDark ? '🌙 深色' : '☀️ 浅色'} 切换</button>
+        </div>
+        <div class="row row--between" style="margin-bottom:10px;align-items:flex-start">
+          <span class="muted">顶部栏样式</span>
+          <div class="row" style="gap:6px;flex-wrap:wrap;justify-content:flex-end">
+            <button class="chip ${barStyle === 'journal' ? 'active' : ''}" id="barJournal">📒 日记式</button>
+            <button class="chip ${barStyle === 'nav' ? 'active' : ''}" id="barNav">☰ 导航式</button>
+          </div>
+        </div>
+        <div class="faint" style="font-size:12px;margin-bottom:12px;line-height:1.6">
+          日记式：左侧图标、中间日期问候、右侧设置；导航式：左侧汉堡、中间标题、右侧主题切换。
+        </div>
         <div class="divider"></div>
         <button class="btn btn--soft btn--block" id="exportBtn">⬇️ 导出全部数据 (JSON)</button>
         <button class="btn btn--soft btn--block" id="clearBtn" style="margin-top:8px;color:var(--danger)">🧹 清空所有本地数据</button>
@@ -115,7 +130,9 @@
     root.appendChild(todoSection(root));
     root.appendChild(notesSection(root));
 
-    root.querySelector('#themeBtn').onclick = () => { WB.toggleTheme(); };
+    root.querySelector('#themeBtn').onclick = () => { WB.toggleTheme(); render(root); };
+    root.querySelector('#barJournal').onclick = () => { S.set('topBarStyle', 'journal'); if (WB.renderAppBar) WB.renderAppBar(); WB.toast('已切换为日记式顶部栏'); render(root); };
+    root.querySelector('#barNav').onclick = () => { S.set('topBarStyle', 'nav'); if (WB.renderAppBar) WB.renderAppBar(); WB.toast('已切换为导航式顶部栏'); render(root); };
     root.querySelector('#exportBtn').onclick = exportData;
     root.querySelector('#clearBtn').onclick = () => {
       if (confirm('确定清空所有本地数据？此操作不可恢复。')) {
