@@ -3,13 +3,13 @@
   const S = WB.store, U = WB.util;
 
   const DEFAULT_APPS = [
-    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#e8e6e1', scheme: 'barcelona://', url: 'https://www.threads.net' },
-    { id: 'a_music', name: '音乐', icon: '🎵', color: '#e8e6e1', scheme: 'music://', url: 'https://music.apple.com' },
-    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#e8e6e1', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
-    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#e8e6e1', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
-    { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#e8e6e1', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
-    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#e8e6e1', scheme: 'mobilenotes://', url: '' },
-    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#e8e6e1', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
+    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#1a1a1a', scheme: 'barcelona://', url: 'https://www.threads.net' },
+    { id: 'a_music', name: '音乐', icon: '🎵', color: '#ff2d55', scheme: 'music://', url: 'https://music.apple.com' },
+    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#ff2442', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
+    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#1c1c1c', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
+    { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#58cc02', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
+    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#ffcc00', scheme: 'mobilenotes://', url: '' },
+    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#ff7a59', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
   ];
 
   function getApps() {

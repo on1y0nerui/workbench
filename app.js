@@ -91,19 +91,19 @@
 
       <div class="grid grid--2" style="margin-bottom:14px">
         <button class="app-tile" data-go="health">
-          <div class="app-tile__icon" style="background:var(--surface-2)">💚</div>
+          <div class="app-tile__icon" style="background:transparent">💚</div>
           <div class="app-tile__name">记录健康</div>
         </button>
         <button class="app-tile" data-go="korean">
-          <div class="app-tile__icon" style="background:var(--surface-2)">📚</div>
+          <div class="app-tile__icon" style="background:transparent">📚</div>
           <div class="app-tile__name">学韩语</div>
         </button>
         <button class="app-tile" data-go="launcher">
-          <div class="app-tile__icon" style="background:var(--surface-2)">📱</div>
+          <div class="app-tile__icon" style="background:transparent">📱</div>
           <div class="app-tile__name">打开应用</div>
         </button>
         <button class="app-tile" data-go="relax">
-          <div class="app-tile__icon" style="background:var(--surface-2)">🌿</div>
+          <div class="app-tile__icon" style="background:transparent">🌿</div>
           <div class="app-tile__name">放松</div>
         </button>
       </div>
