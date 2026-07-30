@@ -1,9 +1,9 @@
 /* 工作台 Service Worker：离线缓存应用外壳，使 PWA 可独立安装使用 */
-const CACHE = 'wb-v1';
+const CACHE = 'wb-v2';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest',
   './styles.css', './store.js', './health.js', './korean.js',
-  './launcher.js', './more.js', './app.js',
+  './launcher.js', './more.js', './relax.js', './app.js',
   './icon-192.png', './icon-512.png'
 ];
 

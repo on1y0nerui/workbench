@@ -3,16 +3,13 @@
   const S = WB.store, U = WB.util;
 
   const DEFAULT_APPS = [
+    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#1a1a1a', scheme: 'barcelona://', url: 'https://www.threads.net' },
+    { id: 'a_music', name: '音乐', icon: '🎵', color: '#ff2d55', scheme: 'music://', url: 'https://music.apple.com' },
+    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#ff2442', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
+    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#1c1c1c', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
     { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#58cc02', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
-    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#ff7a59', scheme: '', url: 'https://apps.apple.com/cn/app/168%E8%BD%BB%E6%96%AD%E9%A3%9F-%E9%97%B4%E6%AD%87%E6%80%A7%E6%96%AD%E9%A3%9F%E8%BF%BD%E8%B8%AA%E5%99%A8/id1498018285' },
-    { id: 'a_wx', name: '微信', icon: '💬', color: '#2aae67', scheme: 'weixin://', url: 'https://weixin.qq.com' },
-    { id: 'a_cal', name: '日历', icon: '📅', color: '#ff9f43', scheme: 'calshow://', url: '' },
-    { id: 'a_note', name: '备忘录', icon: '📝', color: '#54a0ff', scheme: 'mobilenotes://', url: '' },
-    { id: 'a_map', name: '地图', icon: '🗺️', color: '#1dd1a1', scheme: 'maps://', url: 'https://maps.google.com' },
-    { id: 'a_music', name: '音乐', icon: '🎵', color: '#ee5253', scheme: 'music://', url: 'https://music.apple.com' },
-    { id: 'a_health', name: '健康', icon: '❤️', color: '#ff6b81', scheme: 'x-apple-health://', url: '' },
-    { id: 'a_browser', name: '浏览器', icon: '🌐', color: '#5f27cd', scheme: '', url: 'https://www.bing.com' },
-    { id: 'a_camera', name: '相机', icon: '📷', color: '#576574', scheme: 'camera://', url: '' }
+    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#ffcc00', scheme: 'mobilenotes://', url: '' },
+    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#ff7a59', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
   ];
 
   function getApps() {
@@ -63,7 +60,7 @@
             </div>`).join('')}
         </div>
         <div class="faint" style="font-size:12px;margin-top:12px;line-height:1.6">
-          提示：iOS 应用需提前安装并支持 URL Scheme；安卓可改用 App Links。若无法直接唤起，将退回到网页版或应用商店页面。
+          提示：iOS 应用需提前安装并支持 URL Scheme；安卓可改用 App Links。若无法直接唤起，会退回到网页版或应用商店页面。
         </div>
       </div>
 
@@ -79,12 +76,16 @@
       </div>
 
       <div class="card">
-        <div class="card__title" style="margin-bottom:10px">🗑️ 管理</div>
+        <div class="card__title" style="margin-bottom:10px">🗑️ 管理 / 编辑 Scheme</div>
+        <div class="faint" style="font-size:12px;margin-bottom:8px;line-height:1.6">
+          如果某个 App 唤起失败，点「编辑」把正确的 URL Scheme 填进去。
+        </div>
         <div class="list" id="manageList">
           ${apps.map(a => `
             <div class="list__item">
               <div class="app-tile__icon" style="background:${a.color};width:36px;height:36px;font-size:18px;border-radius:10px">${a.icon}</div>
               <div class="grow">${U.escape(a.name)}</div>
+              <button class="btn btn--ghost btn--sm" data-edit="${a.id}">编辑</button>
               <button class="btn btn--danger btn--sm" data-del="${a.id}">删除</button>
             </div>`).join('')}
         </div>
@@ -111,6 +112,19 @@
       save(apps); WB.toast('已添加 ' + name); render(root);
     };
 
+    root.querySelectorAll('#manageList [data-edit]').forEach(b => {
+      b.onclick = () => {
+        const a = apps.find(x => x.id === b.dataset.edit);
+        if (!a) return;
+        const scheme = prompt('修改 ' + a.name + ' 的 URL Scheme（留空则只走兜底网页）：', a.scheme || '');
+        if (scheme === null) return;
+        const url = prompt('修改兜底网页 / App Store 地址（留空则无兜底）：', a.url || '');
+        if (url === null) return;
+        a.scheme = scheme.trim(); a.url = url.trim();
+        save(apps); WB.toast('已更新 ' + a.name); render(root);
+      };
+    });
+
     root.querySelectorAll('#manageList [data-del]').forEach(b => {
       b.onclick = () => { apps = apps.filter(a => a.id !== b.dataset.del); save(apps); render(root); };
     });
@@ -124,7 +138,6 @@
   WB.views = WB.views || {};
   WB.views.launcher = render;
 
-  /* 供主页「一键打开」复用 */
   WB.launchApp = launch;
   WB.getApps = function () { return getApps(); };
 })();

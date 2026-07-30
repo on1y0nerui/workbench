@@ -2,7 +2,7 @@
 (function () {
   const S = WB.store, U = WB.util;
 
-  const TITLES = { home: '工作台', health: '健康', korean: '韩语', launcher: '启动台', more: '我的' };
+  const TITLES = { home: '工作台', health: '健康', korean: '韩语', launcher: '启动台', relax: '放松', more: '我的' };
 
   /* 主题 */
   WB.toggleTheme = function () {
@@ -17,15 +17,16 @@
 
   /* ---------- 主页 ---------- */
   function home(root) {
-    const h = S.get('health', { goals: { steps: 8000, water: 8, sleep: 8, exercise: 30 }, days: {} });
+    const h = S.get('health', { goals: { steps: 8000, water: 8, sleep: 8, exercise: 30, calories: 2000 }, days: {} });
     const k = S.get('korean', null);
     const tk = U.todayKey();
-    const t = (h.days && h.days[tk]) || { steps: 0, water: 0, sleep: 0, exercise: 0, mood: null };
-    const g = h.goals || { steps: 8000, water: 8, sleep: 8, exercise: 30 };
+    const t = (h.days && h.days[tk]) || { steps: 0, water: 0, sleep: 0, exercise: 0, mood: null, calories: { consumed: 0, burned: 0 } };
+    const g = h.goals || { steps: 8000, water: 8, sleep: 8, exercise: 30, calories: 2000 };
     const streak = k ? k.streak : 0;
     const due = k ? k.words.filter(w => w.due <= Date.now()).length : 0;
     const todo = S.get('todo', []);
     const todoTop = todo.slice(0, 3);
+    const net = (t.calories?.consumed || 0) - (t.calories?.burned || 0);
 
     const pct = (v, goal) => Math.max(0, Math.min(100, Math.round((v / goal) * 100)));
 
@@ -53,9 +54,9 @@
           <div class="app-tile__icon" style="background:linear-gradient(150deg,#4f7cff,#7aa0ff)">📱</div>
           <div class="app-tile__name">打开应用</div>
         </button>
-        <button class="app-tile" data-go="more">
-          <div class="app-tile__icon" style="background:linear-gradient(150deg,#9b59b6,#c77dff)">⏱️</div>
-          <div class="app-tile__name">专注 / 笔记</div>
+        <button class="app-tile" data-go="relax">
+          <div class="app-tile__icon" style="background:linear-gradient(150deg,#1dd1a1,#54a0ff)">🌿</div>
+          <div class="app-tile__name">放松</div>
         </button>
       </div>
 
@@ -75,17 +76,19 @@
         ${miniBar('💧 饮水', t.water, g.water, pct(t.water, g.water), 'progress__fill--good')}
         ${miniBar('👟 步数', t.steps, g.steps, pct(t.steps, g.steps), '')}
         ${miniBar('🌙 睡眠', t.sleep || 0, g.sleep, pct(t.sleep || 0, g.sleep), '')}
+        ${miniBar('🍱 卡路里净值', net, g.calories, pct(Math.abs(net), g.calories), net > g.calories ? 'progress__fill--korea' : 'progress__fill--good')}
       </div>
 
       <div class="card">
         <div class="card__head">
-          <div class="card__title">📚 韩语学习</div>
+          <div class="card__title">📚 直接学韩语</div>
           <button class="chip btn--sm" data-go="korean" style="border:none;background:var(--korea);color:#fff">去学习</button>
         </div>
-        <div class="row row--between">
+        <div class="row row--between" style="margin-bottom:8px">
           <span class="muted">连续打卡 <b style="color:var(--korea);font-size:18px">${streak}</b> 天</span>
           <span class="pill" style="background:var(--brand-soft);color:var(--brand)">${due} 个待复习</span>
         </div>
+        <button class="btn btn--block" id="startKorean">开始今日复习</button>
       </div>
 
       <div class="card">
@@ -98,6 +101,7 @@
     `;
 
     root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => navigate(b.dataset.go));
+    root.querySelector('#startKorean').onclick = () => navigate('korean');
 
     const apps = (WB.getApps && WB.getApps()) || [];
     const ha = root.querySelector('#homeApps');
