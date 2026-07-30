@@ -15,6 +15,9 @@
   --danger: #f07d7d;
   --korea: #ff8a6a;
   --korea-soft: #fff0eb;
+  --purple: #c9b6f2;
+  --purple-soft: #efe9fc;
+  --purple-ink: #5b3fa6;
   --shadow: 0 10px 34px rgba(60, 50, 40, 0.07);
   --shadow-sm: 0 3px 12px rgba(60, 50, 40, 0.05);
   --shadow-drawer: 4px 0 34px rgba(60, 50, 40, 0.08);
@@ -39,6 +42,9 @@
   --danger: #ff8f8f;
   --korea: #ffa488;
   --korea-soft: #3d2b22;
+  --purple: #b9a3ec;
+  --purple-soft: #2e2742;
+  --purple-ink: #e9e0ff;
   --shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
   --shadow-sm: 0 3px 12px rgba(0, 0, 0, 0.28);
   --shadow-drawer: 4px 0 34px rgba(0, 0, 0, 0.35);
@@ -175,12 +181,12 @@ html, body {
 /* Buttons */
 .btn {
   border: none; cursor: pointer; border-radius: 16px; padding: 12px 16px;
-  font-size: 14px; font-weight: 600; background: var(--text); color: var(--surface);
+  font-size: 14px; font-weight: 600; background: var(--purple); color: var(--purple-ink);
   box-shadow: var(--shadow-sm); transition: transform .08s, opacity .15s;
 }
 .btn:active { transform: scale(.97); }
-.btn--ghost { background: var(--surface-2); color: var(--text-soft); box-shadow: none; }
-.btn--soft { background: var(--surface-2); color: var(--text); box-shadow: none; }
+.btn--ghost { background: var(--purple-soft); color: var(--purple-ink); box-shadow: none; }
+.btn--soft { background: var(--purple-soft); color: var(--purple-ink); box-shadow: none; }
 .btn--block { width: 100%; }
 .btn--sm { padding: 8px 14px; font-size: 13px; border-radius: 12px; }
 .btn--danger { background: var(--danger); color: #fff; }
