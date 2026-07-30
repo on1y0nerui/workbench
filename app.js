@@ -154,7 +154,7 @@
     const apps = (WB.getApps && WB.getApps()) || [];
     const ha = root.querySelector('#homeApps');
     if (ha) {
-      ha.innerHTML = apps.map(a => `<button class="chip" data-app="${a.id}">${a.icon} ${U.escape(a.name)}</button>`).join('');
+      ha.innerHTML = apps.map(a => `<button class="chip" data-app="${a.id}">${a.emoji || a.icon} ${U.escape(a.name)}</button>`).join('');
       ha.querySelectorAll('[data-app]').forEach(b => b.onclick = () => {
         const app = apps.find(x => x.id === b.dataset.app);
         if (app && WB.launchApp) WB.launchApp(app);

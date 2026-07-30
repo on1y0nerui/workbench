@@ -265,8 +265,14 @@ html, body {
 }
 .app-tile:active { transform: scale(.96); }
 .app-tile__icon {
-  width: 50px; height: 50px; border-radius: 16px; display: grid; place-items: center;
-  font-size: 26px; color: var(--text);
+  width: 50px; height: 50px; border-radius: 22%; display: grid; place-items: center;
+  font-size: 26px; color: var(--text); overflow: hidden;
+  flex: none;
+}
+.app-tile__icon svg { width: 58%; height: 58%; display: block; }
+.app-tile__icon--app {
+  width: 56px; height: 56px; border-radius: 22%;
+  box-shadow: 0 3px 8px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.12);
 }
 .app-tile__name { font-size: 12px; font-weight: 600; text-align: center; color: var(--text-soft); }
 
