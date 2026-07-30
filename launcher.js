@@ -20,19 +20,35 @@
   function save(a) { S.set('apps', a); }
 
   function launch(app) {
-    if (app.url && /^https?:/i.test(app.url)) {
-      window.open(app.url, '_blank', 'noopener');
-      WB.toast('已打开 ' + app.name);
-      return;
-    }
+    // 优先尝试用 URL Scheme 唤起原生 App；若失败（页面未跳走）再回退到网页 / 应用商店
     if (app.scheme) {
       WB.toast('正在尝试唤起 ' + app.name + ' …');
+      let left = true;
+      const onHide = () => { left = false; };
+      document.addEventListener('visibilitychange', onHide);
+      window.addEventListener('pagehide', onHide);
       const ifr = document.createElement('iframe');
       ifr.style.display = 'none';
       ifr.src = app.scheme;
       document.body.appendChild(ifr);
-      setTimeout(() => ifr.remove(), 2500);
-      if (app.url) setTimeout(() => window.open(app.url, '_blank', 'noopener'), 900);
+      setTimeout(() => {
+        ifr.remove();
+        document.removeEventListener('visibilitychange', onHide);
+        window.removeEventListener('pagehide', onHide);
+      }, 3000);
+      if (app.url) {
+        setTimeout(() => {
+          if (left && document.visibilityState !== 'hidden') {
+            window.open(app.url, '_blank', 'noopener');
+            WB.toast('未唤起？已打开网页 / 商店 👉');
+          }
+        }, 1500);
+      }
+      return;
+    }
+    if (app.url) {
+      window.open(app.url, '_blank', 'noopener');
+      WB.toast('已打开 ' + app.name);
       return;
     }
     WB.toast('该快捷方式未设置打开地址');

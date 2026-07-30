@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#4f7cff" />
-  <title>我的工作台</title>
+  <title>个人管理工作台</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon-512.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
@@ -17,20 +17,31 @@
 <body>
   <div id="app">
     <header class="app-bar">
+      <button class="icon-btn" id="menuBtn" aria-label="菜单">☰</button>
       <div class="app-bar__title" id="appTitle">工作台</div>
       <button class="icon-btn" id="themeToggle" aria-label="切换主题">🌗</button>
     </header>
 
     <main id="view" class="view"></main>
 
-    <nav class="tabbar" id="tabbar">
-      <button class="tab" data-view="home"><span class="tab__icon">🏠</span><span class="tab__label">主页</span></button>
-      <button class="tab" data-view="health"><span class="tab__icon">💚</span><span class="tab__label">健康</span></button>
-      <button class="tab" data-view="korean"><span class="tab__icon">📚</span><span class="tab__label">韩语</span></button>
-      <button class="tab" data-view="launcher"><span class="tab__icon">📱</span><span class="tab__label">启动台</span></button>
-      <button class="tab" data-view="relax"><span class="tab__icon">🌿</span><span class="tab__label">放松</span></button>
-      <button class="tab" data-view="more"><span class="tab__icon">⚙️</span><span class="tab__label">我的</span></button>
-    </nav>
+    <aside class="drawer" id="drawer">
+      <div class="drawer__header">
+        <button class="icon-btn" id="drawerClose" aria-label="关闭">✕</button>
+        <div class="drawer__title">个人管理工作台</div>
+      </div>
+      <nav class="drawer__nav">
+        <button class="drawer__item" data-view="home"><span class="drawer__icon">🏠</span><span>主页</span></button>
+        <button class="drawer__item" data-view="health"><span class="drawer__icon">💚</span><span>健康</span></button>
+        <button class="drawer__item" data-view="korean"><span class="drawer__icon">📚</span><span>韩语</span></button>
+        <button class="drawer__item" data-view="launcher"><span class="drawer__icon">📱</span><span>启动台</span></button>
+        <button class="drawer__item" data-view="relax"><span class="drawer__icon">🌿</span><span>放松</span></button>
+        <button class="drawer__item" data-view="more"><span class="drawer__icon">⚙️</span><span>我的</span></button>
+      </nav>
+      <div class="drawer__footer">
+        <div class="faint" style="font-size:12px">已部署到 GitHub Pages</div>
+      </div>
+    </aside>
+    <div class="backdrop" id="backdrop"></div>
   </div>
 
   <div id="toast" class="toast" aria-live="polite"></div>

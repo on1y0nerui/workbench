@@ -35,6 +35,33 @@
     { ko: '천천히', rom: 'cheoncheonhi', zh: '慢', ex: '천천히 말해요. (慢慢说。)' }
   ];
 
+  /* ---------- 发音（Web Speech API TTS） ---------- */
+  let koVoice = null;
+  function pickVoice() {
+    if (koVoice) return koVoice;
+    const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+    koVoice = vs.find(v => /ko[-_]KR/i.test(v.lang)) || vs.find(v => /^ko/i.test(v.lang)) || null;
+    return koVoice;
+  }
+  // 部分浏览器 getVoices() 初始为空，需要等 voiceschanged 事件
+  if (window.speechSynthesis) {
+    pickVoice();
+    speechSynthesis.onvoiceschanged = pickVoice;
+  }
+  WB.speakKo = function (text) {
+    if (!window.speechSynthesis || !text) return false;
+    try {
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ko-KR';
+      const v = pickVoice();
+      if (v) u.voice = v;
+      u.rate = 0.9;
+      speechSynthesis.speak(u);
+      return true;
+    } catch (e) { return false; }
+  };
+
   function getK() {
     let k = S.get('korean', null);
     if (!k) {
@@ -78,6 +105,7 @@
 
       <div class="card" id="studyCard" style="display:none">
         <div class="flash" id="flash">
+          <button class="flash__speak" id="speakKo" title="朗读发音">🔊</button>
           <div class="flash__ko" id="fKo">안녕하세요</div>
           <div class="flash__rom" id="fRom">annyeonghaseyo</div>
           <div class="flash__zh" id="fZh" style="display:none"></div>
@@ -116,6 +144,7 @@
     if (!el) return;
     el.innerHTML = k.words.map(w => `
       <div class="list__item ${w.known ? 'done' : ''}">
+        <button class="chip chip--emoji" data-speak="${w.id}" title="朗读发音">🔊</button>
         <div class="grow">
           <div style="font-weight:700">${U.escape(w.ko)} <span class="faint" style="font-weight:400;font-size:12px">${U.escape(w.rom || '')}</span></div>
           <div class="faint" style="font-size:12px">${U.escape(w.zh)}</div>
@@ -124,6 +153,10 @@
         <button class="chip chip--emoji" data-del="${w.id}" title="删除">🗑️</button>
       </div>`).join('');
 
+    el.querySelectorAll('[data-speak]').forEach(b => b.onclick = () => {
+      const w = k.words.find(x => x.id === b.dataset.speak);
+      if (w) { WB.speakKo(w.ko); WB.toast('🔊 ' + w.ko); }
+    });
     el.querySelectorAll('[data-toggle]').forEach(b => b.onclick = () => {
       const w = k.words.find(x => x.id === b.dataset.toggle);
       w.known = !w.known; if (w.known) w.box = Math.max(w.box, 3);
@@ -152,8 +185,15 @@
       root.querySelector('#fEx').style.display = 'none';
       root.querySelector('#fZh').textContent = w.zh;
       root.querySelector('#fEx').textContent = w.ex || '';
-      root.querySelector('#fHint').textContent = '点击卡片看释义';
+      root.querySelector('#fHint').textContent = '点击卡片看释义 · 🔊 听发音';
       root.querySelector('#studyProgress').textContent = `第 ${idx + 1} / ${queue.length} 个`;
+      WB.speakKo(w.ko);
+    };
+
+    flash.querySelector('#speakKo').onclick = (e) => {
+      e.stopPropagation();
+      const w = queue[idx];
+      WB.speakKo(w.ko);
     };
 
     flash.onclick = () => {
@@ -185,7 +225,8 @@
     root.querySelector('#markYes').onclick = () => advance(true);
     root.querySelector('#markNo').onclick = () => advance(false);
     show();
-    root.querySelector('#studyCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const sc = root.querySelector('#studyCard');
+    if (sc.scrollIntoView) sc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
   function prevDay(key) {

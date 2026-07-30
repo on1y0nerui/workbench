@@ -124,6 +124,16 @@
   WB.views = WB.views || {};
   WB.views.home = home;
 
+  /* ---------- 抽屉导航 ---------- */
+  function openDrawer() {
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('backdrop').classList.add('open');
+  }
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('backdrop').classList.remove('open');
+  }
+
   /* ---------- 导航 ---------- */
   function navigate(view) {
     const root = document.getElementById('view');
@@ -131,10 +141,11 @@
     if (!fn) return;
     root.innerHTML = '';
     fn(root);
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+    document.querySelectorAll('.drawer__item').forEach(t => t.classList.toggle('active', t.dataset.view === view));
     document.getElementById('appTitle').textContent = TITLES[view] || '工作台';
     root.scrollTop = 0;
     window.scrollTo(0, 0);
+    closeDrawer();
     try {
       if (location.hash !== '#' + view) history.replaceState(null, '', '#' + view);
     } catch (e) {
@@ -144,7 +155,10 @@
 
   function boot() {
     document.getElementById('themeToggle').onclick = WB.toggleTheme;
-    document.querySelectorAll('.tab').forEach(t => t.onclick = () => navigate(t.dataset.view));
+    document.getElementById('menuBtn').onclick = openDrawer;
+    document.getElementById('drawerClose').onclick = closeDrawer;
+    document.getElementById('backdrop').onclick = closeDrawer;
+    document.querySelectorAll('.drawer__item').forEach(t => t.onclick = () => navigate(t.dataset.view));
     window.addEventListener('hashchange', () => {
       const v = location.hash.replace('#', '');
       if (v && WB.views[v]) navigate(v);
