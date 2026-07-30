@@ -91,19 +91,19 @@
 
       <div class="grid grid--2" style="margin-bottom:14px">
         <button class="app-tile" data-go="health">
-          <div class="app-tile__icon" style="background:#8fd460">💚</div>
+          <div class="app-tile__icon" style="background:var(--surface-2)">💚</div>
           <div class="app-tile__name">记录健康</div>
         </button>
         <button class="app-tile" data-go="korean">
-          <div class="app-tile__icon" style="background:#ff8a6a">📚</div>
+          <div class="app-tile__icon" style="background:var(--surface-2)">📚</div>
           <div class="app-tile__name">学韩语</div>
         </button>
         <button class="app-tile" data-go="launcher">
-          <div class="app-tile__icon" style="background:#f5a623">📱</div>
+          <div class="app-tile__icon" style="background:var(--surface-2)">📱</div>
           <div class="app-tile__name">打开应用</div>
         </button>
         <button class="app-tile" data-go="relax">
-          <div class="app-tile__icon" style="background:#7ec8e3">🌿</div>
+          <div class="app-tile__icon" style="background:var(--surface-2)">🌿</div>
           <div class="app-tile__name">放松</div>
         </button>
       </div>
@@ -130,7 +130,7 @@
       <div class="card">
         <div class="card__head">
           <div class="card__title">📚 直接学韩语</div>
-          <button class="chip btn--sm" data-go="korean" style="background:var(--korea-soft);color:var(--korea)">去学习</button>
+          <button class="chip btn--sm" data-go="korean">去学习</button>
         </div>
         <div class="row row--between" style="margin-bottom:8px">
           <span class="muted">连续打卡 <b style="color:var(--korea);font-size:18px">${streak}</b> 天</span>

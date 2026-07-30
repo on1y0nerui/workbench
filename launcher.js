@@ -3,13 +3,13 @@
   const S = WB.store, U = WB.util;
 
   const DEFAULT_APPS = [
-    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#6b6b6b', scheme: 'barcelona://', url: 'https://www.threads.net' },
-    { id: 'a_music', name: '音乐', icon: '🎵', color: '#ff8fa3', scheme: 'music://', url: 'https://music.apple.com' },
-    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#ff8a8a', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
-    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#5c5c5c', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
-    { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#9ddd70', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
-    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#ffd54f', scheme: 'mobilenotes://', url: '' },
-    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#ffaa7a', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
+    { id: 'a_threads', name: 'Threads', icon: '🧵', color: '#e8e6e1', scheme: 'barcelona://', url: 'https://www.threads.net' },
+    { id: 'a_music', name: '音乐', icon: '🎵', color: '#e8e6e1', scheme: 'music://', url: 'https://music.apple.com' },
+    { id: 'a_xhs', name: '小红书', icon: '📕', color: '#e8e6e1', scheme: 'xhsdiscover://', url: 'https://www.xiaohongshu.com' },
+    { id: 'a_douyin', name: '抖音', icon: '🎵', color: '#e8e6e1', scheme: 'snssdk1128://', url: 'https://www.douyin.com' },
+    { id: 'a_duo', name: '多邻国', icon: '🦉', color: '#e8e6e1', scheme: 'duolingo://', url: 'https://www.duolingo.com' },
+    { id: 'a_notes', name: '备忘录', icon: '📝', color: '#e8e6e1', scheme: 'mobilenotes://', url: '' },
+    { id: 'a_168', name: '168轻断食', icon: '⏱️', color: '#e8e6e1', scheme: 'leaphealth168://', url: 'https://apps.apple.com/cn/app/id1498018285' }
   ];
 
   function getApps() {
@@ -20,29 +20,19 @@
   function save(a) { S.set('apps', a); }
 
   function launch(app) {
-    // 优先尝试用 URL Scheme 唤起原生 App；若失败（页面未跳走）再回退到网页 / 应用商店
+    // iOS Safari / PWA 里最可靠的唤起方式：直接用 window.location.href 跳 scheme
     if (app.scheme) {
-      WB.toast('正在尝试唤起 ' + app.name + ' …');
-      let left = true;
-      const onHide = () => { left = false; };
-      document.addEventListener('visibilitychange', onHide);
-      window.addEventListener('pagehide', onHide);
-      const ifr = document.createElement('iframe');
-      ifr.style.display = 'none';
-      ifr.src = app.scheme;
-      document.body.appendChild(ifr);
-      setTimeout(() => {
-        ifr.remove();
-        document.removeEventListener('visibilitychange', onHide);
-        window.removeEventListener('pagehide', onHide);
-      }, 3000);
+      WB.toast('正在打开 ' + app.name + ' …');
+      const start = Date.now();
+      window.location.href = app.scheme;
+      // 若 scheme 没唤起 App（页面仍停留），1.2s 后回退到网页 / 应用商店
       if (app.url) {
         setTimeout(() => {
-          if (left && document.visibilityState !== 'hidden') {
-            window.open(app.url, '_blank', 'noopener');
-            WB.toast('未唤起？已打开网页 / 商店 👉');
+          // 如果 App 成功打开，页面会被挂起，setTimeout 实际触发时已经过去很久
+          if (Date.now() - start < 2500) {
+            window.location.href = app.url;
           }
-        }, 1500);
+        }, 1200);
       }
       return;
     }
@@ -147,7 +137,7 @@
   }
 
   function randColor() {
-    const c = ['#f5a623', '#8fd460', '#7ec8e3', '#ff8a6a', '#bfa3f5', '#ffd54f', '#ff9eb5', '#7ed6c1'];
+    const c = ['#e8e6e1', '#dddad4', '#d2cfc9', '#e2dfda', '#e5e2dc', '#d8d5cf'];
     return c[Math.floor(Math.random() * c.length)];
   }
 

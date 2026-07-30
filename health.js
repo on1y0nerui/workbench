@@ -85,7 +85,7 @@
           </div>
           <div class="stat">
             <div class="stat__icon">⚖️</div>
-            <div class="stat__num" id="hNet" style="color:${net > g.calories ? 'var(--danger)' : 'var(--good)'}">${net}</div>
+            <div class="stat__num" id="hNet">${net}</div>
             <div class="stat__label">净值</div>
           </div>
         </div>
