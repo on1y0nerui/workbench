@@ -36,27 +36,47 @@
   ];
 
   /* ---------- 发音（Web Speech API TTS） ---------- */
-  let koVoice = null;
-  function pickVoice() {
-    if (koVoice) return koVoice;
+  // 优先女声：匹配常见女性语音名（iOS 韩语女声通常为 Yuna，Windows 为 Heami）
+  const FEMALE_HINTS = /(yuna|여성|female|samantha|victoria|susan|karen|moira|tessa|luciana|mei|ting|zira|heami|huihui|yaoyao|sinji|sin-ji|jimin|ji-min)/i;
+  let voiceSelEl = null;
+
+  function koVoices() {
     const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
-    koVoice = vs.find(v => /ko[-_]KR/i.test(v.lang)) || vs.find(v => /^ko/i.test(v.lang)) || null;
-    return koVoice;
+    return vs.filter(v => /^ko/i.test(v.lang));
   }
-  // 部分浏览器 getVoices() 初始为空，需要等 voiceschanged 事件
+  // 解析当前应使用的语音：用户已选 > 女性语音 > 第一个韩语语音
+  function resolveVoice() {
+    const ko = koVoices();
+    if (!ko.length) return null;
+    const saved = S.get('koreanVoice', null);
+    if (saved) { const m = ko.find(v => v.name === saved); if (m) return m; }
+    const female = ko.find(v => FEMALE_HINTS.test(v.name));
+    if (female) return female;
+    return ko[0];
+  }
+  // 填充语音下拉框（无韩语语音时提示）
+  function populateVoices() {
+    if (!voiceSelEl || !window.speechSynthesis) return;
+    const ko = koVoices();
+    if (!ko.length) { voiceSelEl.innerHTML = '<option value="">本机暂无韩语语音</option>'; return; }
+    const sel = S.get('koreanVoice', null) || (resolveVoice() && resolveVoice().name) || ko[0].name;
+    voiceSelEl.innerHTML = ko.map(v => `<option value="${U.escape(v.name)}">${U.escape(v.name)}</option>`).join('');
+    voiceSelEl.value = sel;
+  }
+  // 部分浏览器 getVoices() 初始为空，等 voiceschanged 再填充
   if (window.speechSynthesis) {
-    pickVoice();
-    speechSynthesis.onvoiceschanged = pickVoice;
+    speechSynthesis.onvoiceschanged = populateVoices;
   }
-  WB.speakKo = function (text) {
+  WB.speakKo = function (text, rate) {
     if (!window.speechSynthesis || !text) return false;
     try {
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'ko-KR';
-      const v = pickVoice();
+      const v = resolveVoice();
       if (v) u.voice = v;
-      u.rate = 0.9;
+      u.rate = (typeof rate === 'number') ? rate : 0.9;
+      u.pitch = 1.12; // 略升音调，发音更清亮、细节更清楚
       speechSynthesis.speak(u);
       return true;
     } catch (e) { return false; }
@@ -98,6 +118,10 @@
           <div class="stat"><div class="stat__icon">🔁</div><div class="stat__num">${due.length}</div><div class="stat__label">待复习</div></div>
           <div class="stat"><div class="stat__icon">✅</div><div class="stat__num">${knownCount}</div><div class="stat__label">已掌握</div></div>
           <div class="stat"><div class="stat__icon">📖</div><div class="stat__num">${total}</div><div class="stat__label">词库</div></div>
+        </div>
+        <div class="row row--between" style="margin:12px 0 4px">
+          <span class="faint" style="font-size:13px">🔊 朗读语音</span>
+          <select id="voiceSel" class="input" style="width:auto;flex:1;max-width:64%;padding:7px 10px;font-size:13px;margin-left:8px"></select>
         </div>
         <div class="spacer"></div>
         <button class="btn btn--block" id="startStudy">${due.length ? '开始复习 (' + due.length + ')' : '自由练习'}</button>
@@ -237,6 +261,15 @@
 
   function wire(root, k) {
     root.querySelector('#startStudy').onclick = () => startStudy(root, k);
+
+    // 语音选择器
+    voiceSelEl = root.querySelector('#voiceSel');
+    populateVoices();
+    voiceSelEl.onchange = () => {
+      S.set('koreanVoice', voiceSelEl.value);
+      WB.speakKo('안녕하세요');
+      WB.toast('🔊 ' + voiceSelEl.value);
+    };
 
     root.querySelector('#addWord').onclick = () => {
       const ko = root.querySelector('#addKo').value.trim();
